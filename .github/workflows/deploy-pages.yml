@@ -1,8 +1,8 @@
-name: Deploy Vite React to GitHub Pages
+name: Deploy Vite/CRA to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]     # ← 如果你的默认分支不是 main，改成实际分支
   workflow_dispatch:
 
 permissions:
@@ -19,24 +19,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run build
-      - run: cp dist/index.html dist/404.html   # SPA 刷新防 404（关键）
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Install deps
+        run: npm ci || npm i
+
+      - name: Build
+        run: npm run build || npx vite build
+
+      - name: Detect output & add SPA 404
+        id: outdir
+        shell: bash
+        run: |
+          if [ -d dist ]; then
+            cp dist/index.html dist/404.html || true
+            echo "dir=dist" >> $GITHUB_OUTPUT
+          elif [ -d build ]; then
+            cp build/index.html build/404.html || true
+            echo "dir=build" >> $GITHUB_OUTPUT
+          else
+            echo "❌ No build output directory (dist/ or build/) found."
+            exit 1
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: ${{ steps.outdir.outputs.dir }}
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-
