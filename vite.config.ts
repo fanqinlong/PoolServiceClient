@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
+  base: '/PoolServiceClient/',
   plugins: [react()],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
