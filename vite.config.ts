@@ -4,6 +4,7 @@
   import path from 'path';
 
   export default defineConfig({
+    base: '/PoolServiceClient/',   // 仓库名
     plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
