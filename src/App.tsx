@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Button } from './components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar'
 import { Badge } from './components/ui/badge'
+import { Menu } from '@headlessui/react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './components/ui/dropdown-menu'
 import { Bell, Waves, ChevronDown, CheckCircle, Clock, Gift, AlertCircle, ArrowLeft, User, Settings, LogOut, Truck, CreditCard, MessageSquare } from 'lucide-react'
 import { Toaster } from './components/ui/sonner'
@@ -165,9 +166,9 @@ export default function App() {
             {/* Right Side */}
             <div className="flex items-center gap-4">
               {/* Profile Menu Dropdown */}
-              <DropdownMenu open={userMenuOpen} onOpenChange={setUserMenuOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button 
+              <Menu as="div" className="relative inline-block text-left">
+  <Menu.Button className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
+    <Button 
                     variant="ghost" 
                     className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     aria-label="Profile menu"
@@ -182,56 +183,28 @@ export default function App() {
                     </div>
                     <ChevronDown className="w-4 h-4 text-gray-500 hidden lg:block" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  className="w-56 p-2 bg-white rounded-xl shadow-xl border border-gray-100 z-[100] transform-none data-[state=open]:opacity-100 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=closed]:scale-95"
-                  align="end"
-                  sideOffset={8}
-                  style={{ 
-                    transform: 'none !important',
-                    animation: 'none !important'
-                  }}
-                >
-                  {/* Account Settings */}
-                  <DropdownMenuItem
-                    className="flex items-center gap-3 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors focus:bg-gray-100"
-                    onClick={handleAccountSettings}
-                  >
-                    <User className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium text-gray-900">Account Settings</span>
-                  </DropdownMenuItem>
-                  
-                  {/* Shipping Information */}
-                  <DropdownMenuItem
-                    className="flex items-center gap-3 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors focus:bg-gray-100"
-                    onClick={handleShippingInfo}
-                  >
-                    <Truck className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium text-gray-900">Shipping Information</span>
-                  </DropdownMenuItem>
-                  
-                  {/* Payment Information */}
-                  <DropdownMenuItem
-                    className="flex items-center gap-3 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors focus:bg-gray-100"
-                    onClick={handlePaymentInfo}
-                  >
-                    <CreditCard className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium text-gray-900">Payment Information</span>
-                  </DropdownMenuItem>
-
-                  {/* Separator */}
-                  <DropdownMenuSeparator className="my-2 border-gray-100" />
-                  
-                  {/* Logout */}
-                  <DropdownMenuItem
-                    className="flex items-center gap-3 rounded-lg p-3 cursor-pointer hover:bg-red-50 transition-colors focus:bg-red-50"
-                    onClick={handleLogout}
-                  >
-                    <LogOut className="w-5 h-5 text-red-600" />
-                    <span className="font-medium text-red-600">Logout</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+  </Menu.Button>
+  <Menu.Items className="absolute right-0 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+    <Menu.Item>
+      {({ active }) => (
+        <button
+          className={`${active ? 'bg-gray-100' : ''} group flex w-full items-center px-4 py-2 text-sm`}
+        >
+          Account settings
+        </button>
+      )}
+    </Menu.Item>
+    <Menu.Item>
+      {({ active }) => (
+        <button
+          className={`${active ? 'bg-gray-100' : ''} group flex w-full items-center px-4 py-2 text-sm`}
+        >
+          Logout
+        </button>
+      )}
+    </Menu.Item>
+  </Menu.Items>
+</Menu>
             </div>
           </div>
 
